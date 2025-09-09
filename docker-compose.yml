@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:15-alpine
+    build: .
     container_name: temp-elevation-postgres
     environment:
       POSTGRES_DB: testdb
@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_INITDB_ARGS: "--locale=C --encoding=UTF8"
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d:ro
