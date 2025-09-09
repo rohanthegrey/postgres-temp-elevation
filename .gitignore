@@ -1,0 +1,63 @@
+# PostgreSQL Temporary User Elevation - Git Ignore
+
+# Docker volumes and data
+postgres_data/
+pgadmin_data/
+
+# Environment files with secrets
+.env
+.env.local
+.env.production
+*.secret
+
+# Docker Compose override files
+docker-compose.override.yml
+docker-compose.prod.yml
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+*.sql.bak
+
+# Local test data
+test-data/
+local-test/
+
+# Personal notes and scratch files
+notes.md
+scratch.sql
+TODO.md
+personal/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Docker artifacts that shouldn't be tracked
+.dockerignore
+
+# Any local configuration overrides
+config.local.*
+settings.local.*

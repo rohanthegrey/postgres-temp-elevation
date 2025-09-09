@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: temp-elevation-postgres
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_INITDB_ARGS: "--locale=C --encoding=UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+      - ./test-scripts:/opt/test-scripts:ro
+    command: >
+      postgres 
+      -c shared_preload_libraries=pg_cron 
+      -c cron.database_name=testdb
+      -c log_statement=all
+      -c log_duration=on
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d testdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - temp-elevation
+
+  # Optional: pgAdmin for GUI management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: temp-elevation-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - temp-elevation
+    profiles:
+      - gui  # Optional service, activate with --profile gui
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  temp-elevation:
+    driver: bridge
+
